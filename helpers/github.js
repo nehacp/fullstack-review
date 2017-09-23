@@ -14,4 +14,19 @@ let getReposByUsername = (username, callback) => {
 
 }
 
+let parseRepos = repos => {
+	return repos.map(repo => {
+    let info = {
+      id: repo.id,
+      name: repo.name,
+      description: repo.description,
+      url: repo.html_url,
+      owner_id: repo.owner.id,
+      stargazers_count: repo.stargazers_count
+    }
+    return info;
+  });
+}
+
 module.exports.getReposByUsername = getReposByUsername;
+module.exports.parseRepos = parseRepos;

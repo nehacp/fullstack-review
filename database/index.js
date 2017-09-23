@@ -15,27 +15,23 @@ let userSchema = mongoose.Schema({
 	name: String
 })
 
-let Repos = mongoose.model('Repo', repoSchema);
+let Repo = mongoose.model('Repo', repoSchema);
 
 let Users = mongoose.model('User', userSchema);
 
-// let saveRepo = (data, callback) => {
-//   new Repo(data);
-// }
+let saveRepos= (repos, callback) => {
+  repos.map(repo => {
+    let newRepo = new Repo(repo);
+    newRepo.save(callback);
+  });
+}
 
 // let fetchRepos = (userId) => {
 //   Repos.find({owner_id: userId})
 // }
 
 let findUser = (user, callback) => {
-  Users.find(user, (err, data) => {
-    console.log('looking for user');
-    if (err) {
-      callback(err, null);
-    } else {
-      callback(null, data)
-    }
-  });
+  Users.find(user, callback);
 }
 
 let addUser = (user, callback) => {
@@ -47,6 +43,6 @@ let addUser = (user, callback) => {
 }
 
 module.exports.findUser = findUser;
-// module.exports.saveRepo = saveRepo;
+module.exports.saveRepos = saveRepos;
 // module.exports.fetchRepos = fetchRepos;
 module.exports.addUser = addUser;
