@@ -22,7 +22,6 @@ class App extends React.Component {
       data: { username: term },
       success: (data) => {
         if (typeof data === 'string') {
-          console.log('String response', data);
           this.setState({status: data});
           this.setState({repos: []});
         } else {

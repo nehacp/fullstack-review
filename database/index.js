@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetcher');
 
+let userSchema = mongoose.Schema({
+	id: {
+    type: Number,
+    unique: true
+  },
+	name: String
+});
 
 let repoSchema = mongoose.Schema({
   id: {
@@ -14,13 +21,6 @@ let repoSchema = mongoose.Schema({
   stargazers_count: Number
 });
 
-let userSchema = mongoose.Schema({
-	id: {
-    type: Number,
-    unique: true
-  },
-	name: String
-});
 
 let Repo = mongoose.model('Repo', repoSchema);
 let Users = mongoose.model('User', userSchema);

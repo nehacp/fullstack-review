@@ -28,5 +28,18 @@ let parseRepos = repos => {
   });
 }
 
+let allowAccess = (req, res, next) => {
+  res.header('access-control-allow-origin', '*');
+  res.header('access-control-allow-methods', 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS');
+  res.header('access-control-allow-headers', 'content-type, accept');
+  res.header('access-control-max-age', 10);
+  if (req.method === 'OPTIONS') {
+    res.send();  
+  } else {
+    next();
+  }
+}
+
 module.exports.getReposByUsername = getReposByUsername;
 module.exports.parseRepos = parseRepos;
+module.exports.allowAccess = allowAccess;
