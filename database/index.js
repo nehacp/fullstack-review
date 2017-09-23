@@ -1,13 +1,8 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetcher');
 
-// mongoose.on('error', console.error.bind(console, 'connection error'));
-// mongoose.once('open', () => {
-// 	console.log('Connected to Mongoose');
-// })
-
 let repoSchema = mongoose.Schema({
-  github_id: Number,
+  id: Number,
   name: String,
   description: String,
   url: String,
@@ -20,12 +15,38 @@ let userSchema = mongoose.Schema({
 	name: String
 })
 
-let Repo = mongoose.model('Repo', repoSchema);
+let Repos = mongoose.model('Repo', repoSchema);
 
-let save = (/* TODO */) => {
-  // TODO: Your code here
-  // This function should save a repo or repos to
-  // the MongoDB
+let Users = mongoose.model('User', userSchema);
+
+// let saveRepo = (data, callback) => {
+//   new Repo(data);
+// }
+
+// let fetchRepos = (userId) => {
+//   Repos.find({owner_id: userId})
+// }
+
+let findUser = (user, callback) => {
+  Users.find(user, (err, data) => {
+    console.log('looking for user');
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data)
+    }
+  });
 }
 
-module.exports.save = save;
+let addUser = (user, callback) => {
+  console.log('added user', user);
+  new Users(user).save((err, data) => {
+    callback(err, data);
+  });
+
+}
+
+module.exports.findUser = findUser;
+// module.exports.saveRepo = saveRepo;
+// module.exports.fetchRepos = fetchRepos;
+module.exports.addUser = addUser;
