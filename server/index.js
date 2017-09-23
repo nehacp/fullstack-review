@@ -6,16 +6,16 @@ const db = require('../database');
 let app = express();
 
 app.use(express.static(__dirname + '/../client/dist'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser());
+// app.use(bodyParser.urlencoded({extended: false}));
 
 app.post('/repos', function (req, res) {
   db.findUser({name: req.body.username}, (err, user) => {
     if (!user.length) {
-      github.getReposByUsername(req.body.username, (err, response) => {
+      github.getReposByUsername(req.body.username, (err, response, body) => {
 
         //check if a user has repos
-          let repos = JSON.parse(response.body);
+        let repos = JSON.parse(body);
         if (repos.length) {
           let parsedRepos = github.parseRepos(repos);
           res.send(parsedRepos);
