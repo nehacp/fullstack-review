@@ -1,6 +1,6 @@
 const request = require('request');
-const config = require('../config.js');
-const TOKEN = config.TOKEN || process.env.TOKEN;
+// const config = require('../config.js');
+const TOKEN = /*config.TOKEN || */ process.env.TOKEN;
 
 let getReposByUsername = (username, callback) => {
   let options = {
