@@ -7,7 +7,6 @@ let app = express();
 
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser());
-// app.use(bodyParser.urlencoded({extended: false}));
 
 app.post('/repos', function (req, res) {
   db.findUser({name: req.body.username}, (err, user) => {

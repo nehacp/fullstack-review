@@ -22,16 +22,11 @@ let userSchema = mongoose.Schema({
 	name: String
 });
 
-
-
 let Repo = mongoose.model('Repo', repoSchema);
 let Users = mongoose.model('User', userSchema);
 
 let saveRepos= (repos, callback = (e, d) => {}) => {
-  repos.map(repo => {
-    let newRepo = new Repo(repo);
-    newRepo.save(callback);
-  });
+  repos.map(repo => new Repo(repo).save(callback));
 }
 
 let fetchRepos = (param, callback) => {
@@ -47,11 +42,7 @@ let findUser = (user, callback) => {
 }
 
 let addUser = (user, callback = (e, d) => {}) => {
-  console.log('added user', user);
-  new Users(user).save((err, data) => {
-    callback(err, data);
-  });
-
+  new Users(user).save(callback);
 }
 
 module.exports.findUser = findUser;
