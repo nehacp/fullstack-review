@@ -25,7 +25,7 @@ let repoSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 let Users = mongoose.model('User', userSchema);
 
-let saveRepos= (repos, callback = (e, d) => {}) => {
+let saveRepos = (repos, callback = (e, d) => {}) => {
   repos.map(repo => new Repo(repo).save(callback));
 }
 
