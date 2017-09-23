@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+const MONGODB_URI = proces.env.MONGODB_URI || 'mongodb://localhost/fetcher'
+
+mongoose.connect(MONGODB_URI);
 
 let userSchema = mongoose.Schema({
 	id: {
