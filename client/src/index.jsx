@@ -4,35 +4,48 @@ import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      repos: []
+      repos: [],
+      status:''
     }
-
   }
 
   search (term) {
-    console.log(`${term} was searched`); 
+    this.setState({status: ''});
     $.ajax({
       url: 'http://localhost:1128/repos',
       type: 'POST',
       data: { username: term },
       success: (data) => {
-        console.log('Ajax POST success', data);
-        this.setState({repos: data});
+        if (typeof data === 'string') {
+          console.log('String response', data);
+          this.setState({status: data});
+          this.setState({repos: []});
+        } else {
+          this.setState({repos: data});
+        }
       },
       error: (data) => {
-        console.log('Ajax POST failure', data);
+        console.error('Error in search request');
       }
     });
+  }
+
+  componentDidMount() {
+    $.get('http://localhost:1128/repos', (repos) => {
+      this.setState({repos: repos});
+    })
   }
 
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
       <Search onSearch={this.search.bind(this)}/>
+      <div>{this.state.status}</div>
       <RepoList repos={this.state.repos}/>
     </div>)
   }

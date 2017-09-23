@@ -9,43 +9,42 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-
-
-// app.get('/', (req, res) => {
-// 	//need to send top 25 repos
-// })
-
 app.post('/repos', function (req, res) {
- 
-  let foundUser = db.findUser(req.body, (err, userInfo) => {
-    if (err) {
-      console.log('error finding user', err)
-    } else { 
-      if (!userInfo.length) {
-        github.getReposByUsername(req.body.username, (err, githubResponse) => {
-          let repos = Array.from(JSON.parse(githubResponse.body));  
+  db.findUser({name: req.body.username}, (err, user) => {
+    if (!user.length) {
+      github.getReposByUsername(req.body.username, (err, response) => {
+
+        //check if a user has repos
+          let repos = JSON.parse(response.body);
+        if (repos.length) {
           let parsedRepos = github.parseRepos(repos);
           res.send(parsedRepos);
+
           //add repos to database
-          db.saveRepos(parsedRepos, (err, data) => {
-            console.log('Added Repos');
-          });
+          db.saveRepos(parsedRepos);
+
           //add user to database
           let user = repos[0].owner;
-          db.addUser({name: user.login, id: user.id}, (err, user) => {
-            console.log('User added', user, 'Error adding user', err);
-          });
-        });
-      } else {
-        
-      }
+          db.addUser({name: user.login, id: user.id});
+        } else {
+           // if no repos, either user does not exist or has no repos
+          res.send('User does not exist or no repos found');
+        }
+      });
+    } else {
+      //else fetch repos from databases from existing users
+      db.fetchRepos({owner_id: user[0].id}, (err, repos) => {
+        res.send(repos);
+      })
     }
   })  
 });
 
 app.get('/repos', function (req, res) {
-  // TODO - your code here!
-  // This route should send back the top 25 repos
+  // not sure if sort params works
+  db.fetchRepos({sort: '-stargazers_count', limit: 25} , (err, repos) => {
+    res.send(repos);
+  })
 });
 
 let port = 1128;

@@ -3,7 +3,7 @@ import Repo from './Repo.jsx';
 
 const RepoList = (props) => (
   <div>
-    <h4> Repo List Component </h4>
+    <h4>Repository List</h4>
      {props.repos.map(repo => <Repo repo={repo} key={repo.id}/> )}
   </div>
 )
