@@ -35,7 +35,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    $.get('http://localhost:1128/repos', (repos) => {
+    $.get('/repos', (repos) => {
       this.setState({repos: repos});
     })
   }
