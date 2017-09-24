@@ -17,7 +17,7 @@ class App extends React.Component {
   search (term) {
     this.setState({status: ''});
     $.ajax({
-      url: 'http://localhost:1128/repos',
+      url: '/repos',
       type: 'POST',
       data: { username: term },
       success: (data) => {
